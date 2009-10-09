@@ -24,12 +24,15 @@ sub run {
         open my $in,  '<', $module;
         open my $out, '>', "$module.tmp";
 
+        my $need_replace = 0;
+
         while (<$in>) {
 
             # update $VERSION variable
             if (s/(\$VERSION .+) \b $current_version \b/$1$new_version/xms) {
                 $self->{changed_version_variable}{$module}++;
                 $self->log("Update \$VERSION in $module.");
+                $need_replace++;
             }
 
             # update the VERSION section whic say,
@@ -39,6 +42,7 @@ sub run {
                 if (s/(version \s+) $current_version/$1$new_version/xms) {
                     $self->{changed_version_section}{$module}++;
                     $self->log("Update the VERSION section in $module.");
+                    $need_replace++;
                 }
             }
 
@@ -48,8 +52,15 @@ sub run {
         close $in;
         close $out;
 
-        rename $module       => "$module~";
-        rename "$module.tmp" => $module;
+        if($need_replace){
+            rename $module       => "$module~";
+            rename "$module.tmp" => $module;
+
+            unlink "$module~";
+        }
+        else{
+            unlink "$module.tmp";
+        }
     }
 
     return 1;
