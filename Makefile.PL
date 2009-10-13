@@ -5,6 +5,7 @@ use inc::Module::Install;
 all_from 'lib/ShipIt/Step/ChangeAllVersions.pm';
 
 requires 'ShipIt' => 0.52;
+requires 'parent';
 
 test_requires 'Test::More' => 0.88; # done_testing()
 
