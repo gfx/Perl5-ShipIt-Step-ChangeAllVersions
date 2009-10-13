@@ -4,7 +4,7 @@ use 5.008_001;
 use strict;
 use warnings;
 
-our $VERSION = '0.001';
+our $VERSION = '0.002';
 
 use parent qw(ShipIt::Step);
 use ExtUtils::Manifest qw(maniread);
@@ -88,7 +88,7 @@ ShipIt::Step::ChangeAllVersions - Changes versions in all the modules
 
 =head1 VERSION
 
-This document describes ShipIt::Step::ChangeAllVersions version 0.001.
+This document describes ShipIt::Step::ChangeAllVersions version 0.002.
 
 =head1 SYNOPSIS
 

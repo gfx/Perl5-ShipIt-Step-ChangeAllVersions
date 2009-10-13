@@ -1,4 +1,7 @@
 Revision history for Perl extension ShipIt::Step::ChangeAllVersions
 
+0.002 Tue Oct 13 18:36:15 2009
+    - Add "requires 'parent'" to Makefile.PL
+
 0.001 Fri Oct  9 09:44:18 2009
 	- original version; created by Module::Setup
