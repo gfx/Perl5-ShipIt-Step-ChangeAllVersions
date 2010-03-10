@@ -1,5 +1,8 @@
 Revision history for Perl extension ShipIt::Step::ChangeAllVersions
 
+0.003 Wed Mar 10 16:40:12 2010
+    - Respect --dry-run mode
+
 0.002 Tue Oct 13 18:36:15 2009
     - Add "requires 'parent'" to Makefile.PL
 
