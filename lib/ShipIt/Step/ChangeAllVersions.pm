@@ -13,6 +13,12 @@ use Fatal qw(open close rename);
 sub run {
     my ($self, $state) = @_;
 
+    my $dry_run = $state->dry_run;
+
+    if($dry_run){
+        $self->log("*** DRY RUN, not actually updating versions.");
+    }
+
     my $current_version = quotemeta $state->pt->{version};
     my $new_version     = $state->version;
 
@@ -22,7 +28,11 @@ sub run {
 
     foreach my $module (@modules) {
         open my $in,  '<', $module;
-        open my $out, '>', "$module.tmp";
+
+        my $out;
+        if(!$dry_run){
+            open $out, '>', "$module.tmp";
+        }
 
         my $need_replace = 0;
 
@@ -35,10 +45,10 @@ sub run {
                 $need_replace++;
             }
 
-            # update the VERSION section whic say,
+            # update the VERSION section which says,
             # "This is Foo version $ver.",
             # or "This document descrives Foo version $ver."
-            if (/\A =head1 \s+ VERSION/xms ... /\A =\w+/xms) {
+            if (/\A =head1 \s+ VERSION\b/xms ... /\A =\w+/xms) {
                 if (s/(version \s+) $current_version/$1$new_version/xms) {
                     $self->{changed_version_section}{$module}++;
                     $self->log("Update the VERSION section in $module.");
@@ -46,10 +56,13 @@ sub run {
                 }
             }
 
-            print $out $_;
+            print $out $_ if defined $out;
         }
 
         close $in;
+
+        next if $dry_run;
+
         close $out;
 
         if($need_replace){
@@ -66,11 +79,11 @@ sub run {
     return 1;
 }
 
-sub changed_version_variable {
+sub changed_version_variable { # for testing
     return $_[0]->{changed_version_variable};
 }
 
-sub changed_version_section {
+sub changed_version_section { # for testing
     return $_[0]->{changed_version_section};
 }
 
@@ -84,7 +97,7 @@ __END__
 
 =head1 NAME
 
-ShipIt::Step::ChangeAllVersions - Changes versions in all the modules
+ShipIt::Step::ChangeAllVersions - Changes version information in all the modules.
 
 =head1 VERSION
 
@@ -97,10 +110,12 @@ This document describes ShipIt::Step::ChangeAllVersions version 0.002.
 
 =head1 DESCRIPTION
 
-C<ShipIt::Step::ChangeVersion> updates the version variable in the main module.
+C<ShipIt::Step::ChangeVersion> updates the version variable in the main module,
+but it does not deal with other modules nor updates the VERSION section in pods.
+
 C<ShipIt::Step::ChangeAllVersions> provides another way to update versions not
 only in the main module, but in all the modules and scripts in your
-distribution. It will also updates versions in the VERSION sections in pods.
+distribution. It will also updates the VERSION sections in your pods.
 
 =head1 DEPENDENCIES
 
@@ -122,7 +137,7 @@ L<ShipIt>.
 
 =head1 LICENSE AND COPYRIGHT
 
-Copyright (c) 2009, Goro Fuji (gfx). Some rights reserved.
+Copyright (c) 2009-2010, Goro Fuji (gfx). Some rights reserved.
 
 This library is free software; you can redistribute it and/or modify
 it under the same terms as Perl itself.
