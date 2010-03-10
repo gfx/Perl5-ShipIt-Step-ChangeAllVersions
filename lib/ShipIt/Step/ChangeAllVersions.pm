@@ -105,7 +105,7 @@ This document describes ShipIt::Step::ChangeAllVersions version 0.002.
 
 =head1 SYNOPSIS
 
-    # .shipit
+    # In your .shipit
     steps = FindVersion, ChangeAllVersions, ...
 
 =head1 DESCRIPTION
