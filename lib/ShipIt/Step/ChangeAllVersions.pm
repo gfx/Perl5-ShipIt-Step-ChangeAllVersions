@@ -24,7 +24,7 @@ sub run {
 
     # get all modules
     my @modules =
-        grep { -f && / \.(?: p[lm]c? | pod ) \z/xms } keys %{maniread()};
+        grep { -f && m{\A (?:bin|script)/ | \.(?: p[lm]c? | pod ) \z}xms } keys %{maniread()};
 
     foreach my $module (@modules) {
         open my $in,  '<', $module;
