@@ -1,5 +1,9 @@
 Revision history for Perl extension ShipIt::Step::ChangeAllVersions
 
+0.004 Sun Mar 14 13:07:27 2010
+    - Update scrpt files in script/ and bin/ (tokuhirom)
+    - Use File::Find instead of the MANIFEST file
+
 0.003 Wed Mar 10 16:40:12 2010
     - Respect --dry-run mode
 
