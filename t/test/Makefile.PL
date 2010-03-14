@@ -1,5 +1,5 @@
 # for testing
 use Module::Install;
 
-version_from 'Foo.pm';
+version_from 'lib/Foo.pm';
 

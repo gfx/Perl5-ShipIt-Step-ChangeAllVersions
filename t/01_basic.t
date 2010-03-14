@@ -1,7 +1,9 @@
 #!perl -w
 
 use strict;
-use Test::More tests => 22;
+use Test::More;
+use Fatal qw(open close chdir);
+use File::Spec;
 
 my $new_version;
 
@@ -16,7 +18,7 @@ use ShipIt;
 use ShipIt::VC;
 use ShipIt::Step::ChangeAllVersions;
 
-chdir 't/test' or die "Cannot chdir: $!";
+chdir 't/test';
 
 {
     package ShipIt::VC::Dummy;
@@ -29,6 +31,10 @@ chdir 't/test' or die "Cannot chdir: $!";
 }
 
 close STDOUT;
+
+sub f{
+    File::Spec->catfile(split /\//, $_[0]);
+}
 
 
 for(
@@ -47,19 +53,21 @@ for(
         ok $step->run($state), $step;
 
         if($step->isa('ShipIt::Step::ChangeAllVersions')){
-            is $step->changed_version_variable->{'Foo.pm'}, 1, 'VERSION variable in Foo.pm';
-            is $step->changed_version_variable->{'Bar.pm'}, 1, 'VERSION variable in Bar.pm';
+            ok $step->changed_version_variable->{f 'lib/Foo.pm'}, 'VERSION variable in Foo.pm changed';
+            ok $step->changed_version_variable->{'Bar.pm'},       'VERSION variable in Bar.pm changed';
+            ok $step->changed_version_variable->{f 'script/qux'}, 'VERSION variable in script/qux changed';
 
-            is $step->changed_version_section->{'Foo.pm'}, 1, 'VERSION section in Foo.pm';
-            is $step->changed_version_section->{'Bar.pm'}, 1, 'VERSION section in Bar.pm';
-            is $step->changed_version_section->{'Baz.pod'}, 1, 'VERSION section in Baz.pod';
+            ok $step->changed_version_section->{f 'lib/Foo.pm'},  'VERSION section in Foo.pm changed';
+            ok $step->changed_version_section->{'Bar.pm'},        'VERSION section in Bar.pm changed';
+            ok $step->changed_version_section->{'Baz.pod'},       'VERSION section in Baz.pod changed';
         }
     }
 
     like $stdout, qr/^Update \s+ \$VERSION/xms;
     like $stdout, qr/^Update \s+ the \s+ VERSION \s+ section/xms;
 
-    require './Foo.pm';
+    require './lib/Foo.pm';
+    require './script/qux';
     require './Bar.pm';
 
     if($new_version eq '0.001_01'){ # on the first step
@@ -67,8 +75,12 @@ for(
 
         is $Foo::VERSION, $new_version, '$Foo::VERSION has been updated';
         is $Bar::VERSION, $new_version, '$Bar::VERSION has been updated';
+        is $App::qux::VERSION, $new_version, '$App::qux::VERSION has been updated';
 
         isnt $Bar::version, $new_version, '$version is not touched';
         isnt $Bar::Version, $new_version, '$Version is not touched';
     }
 }
+
+done_testing;
+

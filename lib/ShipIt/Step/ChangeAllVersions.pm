@@ -7,8 +7,39 @@ use warnings;
 our $VERSION = '0.003';
 
 use parent qw(ShipIt::Step);
-use ExtUtils::Manifest qw(maniread);
-use Fatal qw(open close rename);
+use Fatal qw(open close rename read opendir closedir);
+use File::Find qw(find);
+
+my $looks_like_perl = qr/\. p(?: [ml]c? | od | erl ) \z/xms;
+
+sub collect_files {
+    my @files;
+
+    # from subdir
+    find sub {
+        return if not -f $_;
+
+        if($_ =~ $looks_like_perl) {
+            push @files, $File::Find::name;
+        }
+        else {
+            open my $in, '<', $_;
+            read $in, my($buff), 2;
+
+            if($buff && $buff eq '#!'){
+                push @files, $File::Find::name;
+            }
+            close $in;
+       }
+    }, grep{ -d } qw(lib script bin);
+
+    # from toplevel
+    opendir my $dirh, '.';
+    push @files, grep{ $_ =~ $looks_like_perl } readdir($dirh);
+    closedir $dirh;
+
+    return @files;
+}
 
 sub run {
     my ($self, $state) = @_;
@@ -22,16 +53,14 @@ sub run {
     my $current_version = quotemeta $state->pt->{version};
     my $new_version     = $state->version;
 
-    # get all modules
-    my @modules =
-        grep { -f && m{\A (?:bin|script)/ | \.(?: p[lm]c? | pod ) \z}xms } keys %{maniread()};
-
-    foreach my $module (@modules) {
+    foreach my $module ($self->collect_files) {
         open my $in,  '<', $module;
+        binmode $in;
 
         my $out;
         if(!$dry_run){
             open $out, '>', "$module.tmp";
+            binmode $out;
         }
 
         my $need_replace = 0;
