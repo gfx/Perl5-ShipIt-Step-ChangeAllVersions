@@ -7,7 +7,7 @@ use warnings;
 our $VERSION = '0.004';
 
 use parent qw(ShipIt::Step);
-use Fatal qw(open close rename read opendir closedir);
+use Fatal qw(open close rename opendir closedir);
 use File::Find qw(find);
 
 my $looks_like_perl = qr/\. p(?: [ml]c? | od | erl ) \z/xms;
@@ -24,7 +24,7 @@ sub collect_files {
         }
         else {
             open my $in, '<', $_;
-            read $in, my($buff), 2;
+            read $in, my($buff), 2; # I don't care whether it fail or not
 
             if($buff && $buff eq '#!'){
                 push @files, $File::Find::name;
