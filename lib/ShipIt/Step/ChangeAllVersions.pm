@@ -4,7 +4,7 @@ use 5.008_001;
 use strict;
 use warnings;
 
-our $VERSION = '0.004';
+our $VERSION = '0.005';
 
 use parent qw(ShipIt::Step);
 use Fatal qw(open close rename opendir closedir);
@@ -130,7 +130,7 @@ ShipIt::Step::ChangeAllVersions - Changes version information in all the modules
 
 =head1 VERSION
 
-This document describes ShipIt::Step::ChangeAllVersions version 0.004.
+This document describes ShipIt::Step::ChangeAllVersions version 0.005.
 
 =head1 SYNOPSIS
 

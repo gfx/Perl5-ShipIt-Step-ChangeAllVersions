@@ -1,5 +1,8 @@
 Revision history for Perl extension ShipIt::Step::ChangeAllVersions
 
+0.005 Mon Mar 22 14:18:33 2010
+    - Ignore the return value of read(), reported by miyagawa san
+
 0.004 Sun Mar 14 13:07:27 2010
     - Update scrpt files in script/ and bin/ (tokuhirom)
     - Use File::Find instead of the MANIFEST file
