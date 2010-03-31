@@ -78,7 +78,7 @@ sub run {
             # "This is Foo version $ver.",
             # or "This document descrives Foo version $ver."
             if (/\A =head1 \s+ VERSION\b/xms ... /\A =\w+/xms) {
-                if (s/(version \s+) $current_version/$1$new_version/xms) {
+                if (s/(version \b .+) $current_version/$1$new_version/xms) {
                     $self->{changed_version_section}{$module}++;
                     $self->log("Update the VERSION section in $module.");
                     $need_replace++;
