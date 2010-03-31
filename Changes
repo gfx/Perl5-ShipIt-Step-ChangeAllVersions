@@ -1,5 +1,8 @@
 Revision history for Perl extension ShipIt::Step::ChangeAllVersions
 
+0.006 Wed Mar 31 10:59:45 2010
+    - Allow the 'v' prefix in VERSION sections
+
 0.005 Mon Mar 22 14:18:33 2010
     - Ignore the return value of read(), reported by miyagawa san
 
