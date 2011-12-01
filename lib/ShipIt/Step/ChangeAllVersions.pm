@@ -17,7 +17,7 @@ sub collect_files {
 
     # from subdir
     find sub {
-        return if not -f $_;
+        return if not ( -f $_ && not -l $_ );
 
         if($_ =~ $looks_like_perl) {
             push @files, $File::Find::name;
