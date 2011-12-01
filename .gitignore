@@ -13,3 +13,6 @@ MANIFEST
 *.out
 *.bak
 ShipIt-Step-ChangeAllVersions-*
+*~
+*.swp
+

@@ -1,5 +1,8 @@
 Revision history for Perl extension ShipIt::Step::ChangeAllVersions
 
+0.007 2011-12-01 10:31:58
+    - Ignore symbolic links
+
 0.006 Wed Mar 31 10:59:45 2010
     - Allow the 'v' prefix in VERSION sections
 
