@@ -1,5 +1,8 @@
 Revision history for Perl extension ShipIt::Step::ChangeAllVersions
 
+1.000 2012-10-20 21:06:22
+    - No feature changes. Just upgraded Module::Install.
+
 0.007 2011-12-01 10:31:58
     - Ignore symbolic links
 

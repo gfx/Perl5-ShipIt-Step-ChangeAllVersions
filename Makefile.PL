@@ -1,6 +1,6 @@
 use strict;
 use warnings;
-use inc::Module::Install;
+use inc::Module::Install 1.06;
 
 all_from 'lib/ShipIt/Step/ChangeAllVersions.pm';
 
