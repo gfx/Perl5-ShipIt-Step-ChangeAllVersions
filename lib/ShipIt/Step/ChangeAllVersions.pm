@@ -35,7 +35,7 @@ sub collect_files {
 
     # from toplevel
     opendir my $dirh, '.';
-    push @files, grep{ $_ =~ $looks_like_perl } readdir($dirh);
+    push @files, grep { ! -l $_ } grep{ $_ =~ $looks_like_perl } readdir($dirh);
     closedir $dirh;
 
     return @files;
