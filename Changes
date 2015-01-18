@@ -1,5 +1,8 @@
 Revision history for Perl extension ShipIt::Step::ChangeAllVersions
 
+1.002 2015-01-18 16:58:18+0900
+    - Preserve file mode, esp. executable flags (#2)
+
 1.001 2013-03-18 20:33:17
     - Do not process symlinks (tokuhirom)
 
