@@ -9,6 +9,7 @@ our $VERSION = '1.001';
 use parent qw(ShipIt::Step);
 use Fatal qw(open close rename opendir closedir);
 use File::Find qw(find);
+use File::stat ();
 
 my $looks_like_perl = qr/\. p(?: [ml]c? | od | erl ) \z/xms;
 
@@ -94,9 +95,11 @@ sub run {
 
         close $out;
 
-        if($need_replace){
+        if($need_replace) {
+            my $mode = File::stat::stat($module)->mode;
             rename $module       => "$module~";
             rename "$module.tmp" => $module;
+            chmod $mode, $module;
 
             unlink "$module~";
         }
